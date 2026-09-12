@@ -1,0 +1,78 @@
+import { dateFromToday } from "../lib/date";
+import type { Task } from "../types/task";
+
+export const tasks: Task[] = [
+  {
+    id: "signup-audit",
+    title: "Audit signup flow",
+    description: "Trace validation errors and document the current onboarding path.",
+    owner: "Mara",
+    status: "todo",
+    priority: "high",
+    dueDate: dateFromToday(2),
+  },
+  {
+    id: "billing-webhook",
+    title: "Stabilize billing webhook",
+    description: "Add clearer retry evidence for delayed payment events.",
+    owner: "Ishan",
+    status: "in-progress",
+    priority: "high",
+    dueDate: dateFromToday(0),
+  },
+  {
+    id: "incident-handbook",
+    title: "Refresh incident handbook",
+    description: "Update ownership and escalation examples for the support rotation.",
+    owner: "Nia",
+    status: "todo",
+    priority: "medium",
+    dueDate: dateFromToday(7),
+  },
+  {
+    id: "alert-rules",
+    title: "Simplify alert rules",
+    description: "Remove duplicated thresholds and explain the remaining alerts.",
+    owner: "Theo",
+    status: "in-progress",
+    priority: "medium",
+    dueDate: dateFromToday(10),
+  },
+  {
+    id: "keyboard-shortcuts",
+    title: "Ship keyboard shortcuts",
+    description: "Add documented shortcuts for moving between task columns.",
+    owner: "June",
+    status: "done",
+    priority: "low",
+    dueDate: dateFromToday(2),
+  },
+  {
+    id: "accessibility-audit",
+    title: "Close accessibility audit",
+    description: "Confirm focus order and label coverage across the board.",
+    owner: "Mara",
+    status: "done",
+    priority: "medium",
+    dueDate: dateFromToday(-1),
+  },
+  {
+    id: "release-checklist",
+    title: "Backfill release checklist",
+    description: "Document the release checks that still live in team memory.",
+    owner: "Theo",
+    status: "todo",
+    priority: "high",
+    dueDate: null,
+  },
+  {
+    id: "onboarding-copy",
+    title: "Polish onboarding copy",
+    description: "Clarify the empty-state guidance for first-time users.",
+    owner: "Nia",
+    status: "in-progress",
+    priority: "low",
+    dueDate: dateFromToday(14),
+  },
+];
+
