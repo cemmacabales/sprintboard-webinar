@@ -12,6 +12,13 @@ on:
   issues:
     types: [labeled]
 
+# The branch agents work against. `main` is healthy, so during the webinar set
+# the repository variable DEMO_BASE_BRANCH to `demo/needs-work`:
+#   gh variable set DEMO_BASE_BRANCH --body demo/needs-work
+# Unset it afterwards and the pipeline goes back to working on main.
+env:
+  BASE_BRANCH: ${{ vars.DEMO_BASE_BRANCH || 'main' }}
+
 concurrency:
   group: agent-ready-${{ github.event.issue.number }}
   cancel-in-progress: false
@@ -31,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: main
+          ref: ${{ env.BASE_BRANCH }}
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
@@ -131,7 +138,7 @@ jobs:
           ISSUE_TITLE: ${{ github.event.issue.title }}
         run: |
           url=$(gh pr create \
-            --base main \
+            --base "$BASE_BRANCH" \
             --head "agent/issue-${ISSUE_NUMBER}" \
             --title "${ISSUE_TITLE}" \
             --body "$(printf 'Implements #%s.\n\n## What Codex changed\n\n%s\n\n---\nOpened automatically by the `agent-ready` workflow. Verified with `npm run test:run`, `npm run lint`, and `npm run build`.' "$ISSUE_NUMBER" "$(cat .codex-task/result.md 2>/dev/null || echo 'See commit for details.')")")
@@ -162,7 +169,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: main
+          ref: ${{ env.BASE_BRANCH }}
           fetch-depth: 0
 
       - name: Fetch pull request head
@@ -181,9 +188,10 @@ jobs:
           safety-strategy: read-only
           output-schema-file: .github/review-schema.json
           prompt: |
-            Review the change on refs/remotes/origin/pr-head against main.
+            Review the change on refs/remotes/origin/pr-head against the base
+            branch, which is checked out as HEAD.
 
-            Run `git diff main...origin/pr-head` to see it.
+            Run `git diff HEAD...origin/pr-head` to see it.
 
             Judge only this diff. Prioritise correctness, regressions,
             accessibility, and unnecessary complexity, in that order. Follow
