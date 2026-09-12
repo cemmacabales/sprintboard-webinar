@@ -413,6 +413,10 @@ h1 {
     gap: 4px;
     padding-inline: 12px 7px;
   }
+
+  .filter-button[data-active="true"][data-filter="at-risk"] .filter-count {
+    margin-left: -4px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

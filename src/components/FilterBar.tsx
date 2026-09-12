@@ -1,10 +1,11 @@
 import type { Task } from "../types/task";
-import type { TaskFilter } from "../lib/filters";
+import { isAtRisk, type TaskFilter } from "../lib/filters";
 
 const labels: Record<TaskFilter, string> = {
   all: "All",
   active: "Active",
   done: "Done",
+  "at-risk": "At risk",
 };
 
 interface FilterBarProps {
@@ -18,6 +19,7 @@ export function FilterBar({ filter, tasks, onChange }: FilterBarProps) {
     all: tasks.length,
     active: tasks.filter((task) => task.status !== "done").length,
     done: tasks.filter((task) => task.status === "done").length,
+    "at-risk": tasks.filter((task) => isAtRisk(task)).length,
   };
 
   return (
@@ -26,6 +28,7 @@ export function FilterBar({ filter, tasks, onChange }: FilterBarProps) {
         <button
           className="filter-button"
           data-active={filter === value}
+          data-filter={value}
           aria-pressed={filter === value}
           key={value}
           onClick={() => onChange(value)}
@@ -40,4 +43,3 @@ export function FilterBar({ filter, tasks, onChange }: FilterBarProps) {
     </div>
   );
 }
-

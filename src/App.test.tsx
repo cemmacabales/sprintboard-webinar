@@ -46,6 +46,35 @@ describe("SprintBoard starting experience", () => {
     expect(screen.queryByText("Audit signup flow")).not.toBeInTheDocument();
   });
 
+  it("filters at-risk tasks, shows the count, and writes the filter to the URL", () => {
+    render(<App />);
+
+    const atRisk = screen.getByRole("button", { name: /^At risk/ });
+    expect(atRisk).toHaveTextContent("3");
+
+    fireEvent.click(atRisk);
+
+    expect(screen.getByText("Stabilize billing webhook")).toBeVisible();
+    expect(screen.getByText("Audit signup flow")).toBeVisible();
+    expect(screen.getByText("Refresh incident handbook")).toBeVisible();
+    expect(screen.queryByText("Ship keyboard shortcuts")).not.toBeInTheDocument();
+    expect(screen.queryByText("Simplify alert rules")).not.toBeInTheDocument();
+    expect(new URLSearchParams(window.location.search).get("filter")).toBe("at-risk");
+  });
+
+  it("restores the at-risk filter from the URL", () => {
+    window.history.replaceState({}, "", "/?filter=at-risk");
+
+    render(<App />);
+
+    expect(screen.getByRole("button", { name: /^At risk/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByText("Audit signup flow")).toBeVisible();
+    expect(screen.queryByText("Ship keyboard shortcuts")).not.toBeInTheDocument();
+  });
+
   it("opens details for a task with a due date", () => {
     render(<App />);
 
@@ -67,6 +96,7 @@ describe("SprintBoard starting experience", () => {
       expect.stringMatching(/^All/),
       expect.stringMatching(/^Active/),
       expect.stringMatching(/^Done/),
+      expect.stringMatching(/^At risk/),
     ]);
     for (const button of buttons) {
       expect(button).not.toHaveAttribute("tabindex", "-1");
