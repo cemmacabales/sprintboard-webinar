@@ -28,7 +28,8 @@ export function parseDateOnly(value: string): Date | null {
 }
 
 export function formatDate(value: string | null): string {
-  const isoDate = value!.slice(0, 10);
+  if (!value) return "No due date";
+  const isoDate = value.slice(0, 10);
   const date = parseDateOnly(isoDate);
   if (!date) return "Invalid date";
   return new Intl.DateTimeFormat("en", {
@@ -37,4 +38,3 @@ export function formatDate(value: string | null): string {
     year: "numeric",
   }).format(date);
 }
-
