@@ -1,12 +1,21 @@
 import type { Task } from "../types/task";
-import { isWithinNextDays } from "./date";
+import { parseDateOnly } from "./date";
 
 export type TaskFilter = "all" | "active" | "done" | "at-risk";
 
 export const FILTERS: readonly TaskFilter[] = ["all", "active", "done", "at-risk"];
 
 export function isAtRisk(task: Task, now = new Date()): boolean {
-  return task.status !== "done" && isWithinNextDays(task.dueDate, 7, now);
+  if (task.status === "done") return false;
+  if (!task.dueDate) return false;
+
+  const due = parseDateOnly(task.dueDate);
+  if (!due) return false;
+
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const finalDay = new Date(today);
+  finalDay.setDate(finalDay.getDate() + 7);
+  return due >= today && due <= finalDay;
 }
 
 export function isTaskFilter(value: string | null): value is TaskFilter {
