@@ -27,6 +27,21 @@ export function parseDateOnly(value: string): Date | null {
   return date;
 }
 
+export function isWithinNextDays(
+  value: string | null,
+  days: number,
+  now = new Date(),
+): boolean {
+  if (!value) return false;
+  const date = parseDateOnly(value);
+  if (!date) return false;
+
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const finalDay = new Date(today);
+  finalDay.setDate(finalDay.getDate() + days);
+  return date >= today && date <= finalDay;
+}
+
 export function formatDate(value: string | null): string {
   if (!value) return "No due date";
   const isoDate = value.slice(0, 10);

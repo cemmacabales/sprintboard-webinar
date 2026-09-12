@@ -1,8 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Task } from "../types/task";
 import { isAtRisk } from "./filters";
 
 const now = new Date(2026, 8, 12, 12);
+
+afterEach(() => vi.useRealTimers());
 
 function task(dueDate: string | null, status: Task["status"] = "todo"): Task {
   return {
@@ -24,7 +26,6 @@ describe("isAtRisk", () => {
     expect(isAtRisk(task("2026-09-12"))).toBe(true);
     expect(isAtRisk(task("2026-09-19"))).toBe(true);
 
-    vi.useRealTimers();
   });
 
   it("excludes completed, overdue, distant, missing, and invalid due dates", () => {
@@ -37,6 +38,5 @@ describe("isAtRisk", () => {
     expect(isAtRisk(task(null))).toBe(false);
     expect(isAtRisk(task("not-a-date"))).toBe(false);
 
-    vi.useRealTimers();
   });
 });

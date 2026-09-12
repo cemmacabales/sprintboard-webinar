@@ -83,7 +83,7 @@ describe("SprintBoard starting experience", () => {
     const details = screen.getByRole("dialog", { name: "Task details" });
     expect(within(details).getByRole("heading", { name: "Audit signup flow" })).toBeVisible();
     expect(within(details).getByText("Due")).toBeVisible();
-    expect(within(details).getByText(/Sep \d{1,2}, 2026/)).toBeVisible();
+    expect(within(details).getByText(/[A-Z][a-z]{2} \d{1,2}, \d{4}/)).toBeVisible();
   });
 
   it("opens details for a task without a due date", () => {

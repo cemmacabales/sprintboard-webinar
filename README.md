@@ -46,8 +46,12 @@ Return to a known checkpoint with `git switch <branch>`, then run `npm ci`. Swit
 
 ## Screenshots
 
-- [Starting state](docs/screenshots/start.png)
-- [Final state](docs/screenshots/final.png)
+Browser automation was unable to capture the local app while the desktop security-policy check was unavailable. When capture is available, save the two verified images as:
+
+- `docs/screenshots/start.png` from `demo/start`
+- `docs/screenshots/final.png` from `demo/final`
+
+See [the screenshot checklist](docs/screenshots/README.md) for the exact views.
 
 ## Troubleshooting
 

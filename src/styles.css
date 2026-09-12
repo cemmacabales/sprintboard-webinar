@@ -415,7 +415,7 @@ h1 {
   }
 
   .filter-button[data-active="true"][data-filter="at-risk"] .filter-count {
-    margin-left: -4px;
+    margin-left: 4px;
   }
 }
 
