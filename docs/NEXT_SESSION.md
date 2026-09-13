@@ -70,7 +70,7 @@ slides written for 60 minutes; machine-local).
 - PRs #1–#5 all merged. #3 was merged before its follow-up commits, which is
   why #4 exists.
 - Deck: `docs/presentation/nine-ways-to-run-an-agent.pptx`. Generator:
-  `docs/presentation/deck-source/build.js`.
+  `docs/presentation/deck-source/build.cjs`.
 
 ## 4. In-progress task: the setup PDF
 
@@ -234,6 +234,7 @@ is kept for reference.
    fallback PR, and one timed rehearsal. None confirmed done.
 3. During rehearsal, confirm cloud UI labels, `/permissions`, and
    `--approve-for-me` behaviour; update the docs if anything differs.
-4. The deck uses Calibri; present from PowerPoint, not Keynote or Google Slides.
+4. Present from **Google Slides** (PowerPoint isn't installed). The deck is light and minimal
+   (Inter, JetBrains Mono), built by `deck-source/build.cjs`, and uploaded to Drive as Google Slides.
 5. Optional: delete stale remote branches (ask first), capture screenshots,
    trim superseded addenda in `docs/PROJECT_HANDOFF.md`.

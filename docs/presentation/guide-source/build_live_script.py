@@ -227,7 +227,7 @@ def before():
         ["Terminal tab 1", "`cd ~/sprintboard-webinar && clear` · prompt shows `git:(live)` · no Codex running"],
         ["Terminal tab 2", "`npm run dev` running · leave it"],
         ["Terminal text large", "Cmd and + until about 30 lines fill the window"],
-        ["Deck", "PowerPoint, slide 1, presenter view on your second screen"],
+        ["Deck", "Google Slides: **Nine Ways to Run an Agent** in your Drive · Slideshow → Presenter view, notes on your second screen"],
         ["Do Not Disturb", "On. Chat apps quit."],
         ["Browser tabs, in this order", "see the table below"],
     ], widths=(4, 30, 66), header=("", "Check", "How")))

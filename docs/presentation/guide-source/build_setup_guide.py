@@ -965,7 +965,7 @@ def overview():
             ["chatgpt.com/codex", "Demo 3 tasks A and B, environment settings, Code review settings", "GitHub connected, environment created"],
             ["GitHub", "Branches, pull requests, CI checks, `@codex review` comments", "Codex GitHub app installed on the repository"],
             ["Browser tab on localhost", "Demo 0 crash, optional proof of the fix", "`npm run dev` running on `live`"],
-            ["PowerPoint", "The five-slide deck", "Present from PowerPoint: the deck uses Calibri"],
+            ["Google Slides", "The five-slide deck", "The Google Slides copy in your Drive; Presenter view shows the notes"],
         ],
         [22, 48, 30], first_bold=True))
     story += h2("The 40 minutes these steps prepare")
@@ -987,7 +987,7 @@ def prerequisites():
         ["GitHub CLI signed in (optional, used for checks)", "`gh auth status` shows `cemmacabales`"],
         ["zsh as your shell (macOS default)", "`echo $SHELL` prints `/bin/zsh`"],
         ["The repository cloned at `~/sprintboard-webinar`", "`git -C ~/sprintboard-webinar remote -v`"],
-        ["PowerPoint, for the Calibri deck", "Open `docs/presentation/nine-ways-to-run-an-agent.pptx`"],
+        ["Google Slides, for the deck", "**Nine Ways to Run an Agent** opens from your Google Drive"],
         ["Plan headroom: no heavy Codex use in the 5 hours before rehearsal or the live session", "chatgpt.com/codex/settings/usage"],
     ]))
     story += h2("What you do not need")
@@ -1455,7 +1455,7 @@ def part4():
         "Parts 1–3 done, each demo run at least once on its own.",
         "Usage dashboard shows headroom. A full rehearsal costs about what the live session does.",
         "Rebuild `live`: `" + LIVE + "`",
-        "Timer visible on a second screen or phone. Deck open in PowerPoint.",
+        "Timer visible on a second screen or phone. Deck open in Google Slides.",
     ])
     story += h2("R2 · The timed run")
     story += bullets([
@@ -1533,7 +1533,7 @@ def part5():
         ["Seeded state", "`npm run test:run` → 12 passed; `git rev-parse --short HEAD` → `386849b`"],
         ["Nested rules present", "`ls src/components/AGENTS.md`"],
         ["Dev server and crash", "`npm run dev`, open the **localhost** URL, click **Backfill release checklist**, then reload"],
-        ["Deck", "PowerPoint, slide 1, presenter view tested"],
+        ["Deck", "Google Slides, slide 1, Presenter view tested"],
         ["Browser tabs, in order", "chatgpt.com/codex · environment settings · GitHub repository · bloated `AGENTS.md` on `main` · fallback PR · localhost"],
         ["Usage headroom", "chatgpt.com/codex/settings/usage; no full rehearsal in the last 5 hours"],
         ["Quiet machine", "Do Not Disturb on, chat apps quit, unrelated tabs closed, terminal font enlarged"],
@@ -1625,7 +1625,7 @@ def part6():
             ["A demo PR was merged into `demo/needs-work`", "Clicked Merge.", "Branch no longer broken. Restore `386849b` deliberately (step 2.7), never in the last hour."],
         ]),
         ("Slides and screen", [
-            ["Deck fonts look wrong", "Keynote or Google Slides substituted Calibri.", "Present from PowerPoint."],
+            ["Deck fonts look wrong", "The Inter font didn't load in Google Slides.", "Reload the tab; the layout still works in the fallback font."],
             ["Terminal unreadable on the stream", "Font too small.", "Cmd and +, until about 30 lines fill the window."],
         ]),
     ]
@@ -1784,8 +1784,8 @@ def appendices():
         ["`AGENTS.md`", "Repository rules and Code Review Rules"],
         ["`.github/workflows/ci.yml`", "CI: `npm ci`, tests, lint, build on PRs and pushes to `main`; Node 22; no secrets"],
         ["`docs/NEXT_SESSION.md`", "Start-here handoff for the next working session"],
-        ["`docs/presentation/nine-ways-to-run-an-agent.pptx`", "The five-slide deck (Calibri; present from PowerPoint)"],
-        ["`docs/presentation/deck-source/build.js`", "Deck generator"],
+        ["`docs/presentation/nine-ways-to-run-an-agent.pptx`", "The five-slide deck (source for the Google Slides copy)"],
+        ["`docs/presentation/deck-source/build.cjs`", "Deck generator"],
         ["`docs/presentation/setup-guide.pdf`", "This guide"],
         ["`docs/presentation/guide-source/build_setup_guide.py`", "This guide's generator"],
         ["`docs/presentation/setup.md`", "Short version of Parts 1–2"],
