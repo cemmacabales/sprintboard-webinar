@@ -1027,3 +1027,57 @@ does **not** work under permission profiles.
 - The app calls the user's original checkout a **Local checkout**, a
   Codex-created worktree a **Worktree**, and moving a thread between them a
   **Handoff**.
+
+---
+
+# Addendum: 13 September 2026, the webinar follows the guide deck
+
+This supersedes the agentic-pipeline addendum above.
+
+The presenter supplied a guide deck, *Nine Ways to Run an Agent* (15 content
+slides written for 60 minutes). The webinar now revolves around it:
+
+- 40 minutes, five designed slides, each followed by a live SprintBoard demo.
+- Topics: the sandbox and approval matrix, `AGENTS.md` discovery and content,
+  CLI versus cloud versus IDE and the two-phase cloud environment,
+  `@codex review`, and model lanes.
+- Celestial model lanes (Luna, Terra, Sol, Astra) with no version numbers.
+- Runs entirely on ChatGPT Plus.
+
+## Removed
+
+`agent-queue.yml`, `pr-gate.yml` (replaced by plain `ci.yml`), `docs/automations/`,
+`docs/presentation/automation-setup.md`, the eight pipeline labels, and the
+`DEMO_BASE_BRANCH` variable.
+
+## Kept
+
+`main` healthy, `demo/needs-work` broken, and the Code Review Rules in
+`AGENTS.md`, which `@codex review` reads.
+
+## Added
+
+The five-slide deck, run of show, demo prompts, setup guide, presenter
+checklist, a deliberately bloated `AGENTS.md` example, and two model-lane
+profile files. On `demo/needs-work`, a nested `src/components/AGENTS.md` for the
+discovery demo.
+
+## Corrections to the guide
+
+Verified against Codex CLI 0.153.4 and OpenAI's documentation on 13 September
+2026:
+
+- The `untrusted` approval policy is deprecated. Current policies: `on-request`
+  (default), `never`, `granular`. The matrix columns are now `on-request`,
+  auto-review (`approvals_reviewer = "auto_review"`, or `--approve-for-me`), and
+  `never`.
+- `/permissions` switches sandbox and approval during a session.
+- Profiles are separate files, `~/.codex/<name>.config.toml`, loaded with
+  `codex -p <name>`.
+- `AGENTS.md` loads from the git root down to the working directory.
+  `project_root_markers` has open issues (openai/codex#12128, #12539), so the
+  deck doesn't rely on it.
+- Cloud: the setup script has internet; secrets exist only during setup; the
+  agent phase has no network by default; environment variables persist.
+- `@codex` on GitHub issues isn't available on subscription plans
+  (openai/codex#34425). On pull requests it is.

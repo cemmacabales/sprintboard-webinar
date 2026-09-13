@@ -1,92 +1,172 @@
-# Copy-ready webinar prompts
+# Copy-ready demo prompts
 
-Paste these verbatim. They are ordered to match
+Paste these verbatim. They follow
 [`docs/presentation/run-of-show.md`](presentation/run-of-show.md).
 
-Start on `demo/needs-work`, model **Terra**, effort **medium**, execution
-**Local**.
+**Before you start:** the terminal is at the repository root on the `live`
+branch, `codex` works, and the dev server is running. See
+[`docs/presentation/setup.md`](presentation/setup.md).
 
 ---
 
-## 1. Review and triage (Act 1, 6:00)
+## Demo 0 · The stakes
 
-```text
-Review this repository for real problems. Follow AGENTS.md.
-
-Read the code before you judge it. The test suite currently passes, so do not
-rely on the tests to tell you what is wrong.
-
-Report what you find grouped by category: correctness, test coverage,
-maintainability, and visual or accessibility issues. For each one give the file,
-what is wrong, and how a user would notice.
-
-Do not change any code yet.
+```bash
+npm run test:run
 ```
 
-Expected: the null-due-date crash in `src/lib/date.ts`, the missing regression
-test in `src/App.test.tsx`, the duplicated date window in `src/lib/filters.ts`,
-and the negative margin in `src/styles.css`.
+Then open **Backfill release checklist** in the browser. The board
+white-screens.
 
 ---
 
-## 2. File the issues (Act 1, 10:00)
+## Demo 1 · Sandbox and approvals
+
+### Step 1: read-only, nobody asks
+
+```bash
+codex --sandbox read-only --ask-for-approval never
+```
 
 ```text
-Open a GitHub issue for each problem you just found, using the gh CLI.
+Fix the crash that happens when a task has no due date. The bug is in src/lib/date.ts.
+```
 
-One issue per problem. Give each a clear title, reproduction steps, the file
-involved, and acceptance criteria a reviewer could check. Apply the label `bug`
-or `enhancement` as appropriate.
+Expected: it reads the file and explains the bug, but it cannot write. With
+`never`, it reports that the edit failed instead of asking.
 
-Do not apply the agent-ready label. I will do that.
+### Step 2: switch in place
+
+Type `/permissions` and choose **workspace-write** with **on-request**. Then:
+
+```text
+Now make that fix, add a regression test for a task with no due date, and run npm run test:run.
+```
+
+Expected: it edits and runs the tests without asking. Everything stays inside
+the workspace.
+
+### Step 3: cross the line
+
+```text
+Run npm view react version and tell me the result.
+```
+
+Expected: it needs the network, so it stops and asks you. Decline it on
+screen.
+
+### Step 4: let an agent answer
+
+Quit with Ctrl+C, then:
+
+```bash
+codex --approve-for-me
+```
+
+```text
+Run npm view react version and tell me the result.
+```
+
+Expected: the automatic reviewer decides instead of you. Read its decision out
+loud.
+
+### Name it, don't run it
+
+```bash
+codex --sandbox danger-full-access --ask-for-approval never
+```
+
+### Reset
+
+```bash
+git reset --hard origin/demo/needs-work
 ```
 
 ---
 
-## 3. Debug the crash locally (Act 2, 13:30)
+## Demo 2 · AGENTS.md discovery
 
-Reproduce it in the built-in browser first, then paste:
+Show the root `AGENTS.md` beside the bloated example. The example lives on
+`main`, so open it on GitHub:
+`docs/presentation/examples/AGENTS.bloated.md`.
 
-```text
-Opening the task "Backfill release checklist" white-screens the whole app.
+### From the repository root
 
-Reproduce the failure, explain the root cause precisely, make the smallest safe
-fix, and add the regression test that is currently missing. Then run
-npm run test:run, npm run lint, and npm run build, and report the results.
+```bash
+codex
 ```
 
-Expected root cause: `formatDate` uses a non-null assertion (`value!`) on a
-value that really is `null`.
+```text
+Without opening any files, list every instruction you were given for this repository and say which file each one came from.
+```
+
+Expected: only the root `AGENTS.md`. Nothing about components.
+
+### From the components folder
+
+Quit, then:
+
+```bash
+cd src/components && codex
+```
+
+```text
+Without opening any files, list every instruction you were given for this repository and say which file each one came from.
+```
+
+Expected: the root rules **and** `src/components/AGENTS.md`, including the line
+"Component rules loaded."
+
+```bash
+cd ../..
+```
 
 ---
 
-## 4. Optional — verify in the browser (overflow)
+## Demo 3 · Cloud task and the two phases
+
+Show **chatgpt.com/codex/settings/environments**: setup script `npm ci`, agent
+internet off.
+
+### Task A: start this first, on `demo/needs-work`
 
 ```text
-Open SprintBoard in the built-in browser. Verify the All, Active, Done, and
-At risk filter states, and check the layout at desktop and narrow widths.
-Report anything you cannot verify.
+Opening the task "Backfill release checklist" crashes the details panel because the task has no due date. Fix it with the smallest safe change, add the missing regression test, and run npm run test:run, npm run lint, and npm run build. Follow AGENTS.md.
 ```
+
+### Task B: the agent phase has no network
+
+```text
+Run `npm view react version` and report exactly what happens. Do not change any files.
+```
+
+Expected: a network error. Install dependencies in setup, not in the task.
 
 ---
 
-## 5. Optional — prevention pass (overflow)
+## Demo 4 · Review and the fast lane
+
+1. Open Task A, review the diff, and **create a pull request against
+   `demo/needs-work`**.
+2. Wait for the automatic review. If nothing posts within a minute, comment:
 
 ```text
-Search for the same due-date assumption anywhere else in the repository.
-Report findings only. Do not edit.
+@codex review
 ```
 
----
+3. Read one finding aloud and say whether you agree.
+4. Optional follow-up on the pull request:
 
-## 6. The automations
+```text
+@codex fix it
+```
 
-These are configured once in the Codex app, not pasted live. Their prompts live
-in [`docs/automations/`](automations/README.md):
+### The fast lane
 
-- [Agent: implement](automations/implement.md) — picks up `agent-ready` issues and opens pull requests
-- [Agent: review](automations/review.md) — reviews `agent-pr` pull requests and labels a verdict
-- [Nightly repository review](automations/nightly-review.md) — files `agent-filed` issues
+```bash
+codex -p fast
+```
 
-All three begin by following `AGENTS.md`. That is the point: the rules you rely
-on in the app are the rules that apply when nobody is watching.
+```text
+In src/App.tsx, rename visibleTasks to filteredTasks everywhere it appears. Then run npm run lint and npm run test:run.
+```
