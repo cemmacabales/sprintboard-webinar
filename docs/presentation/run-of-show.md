@@ -1,5 +1,10 @@
 # Run of show: Nine Ways to Run an Agent
 
+> **Presenting or rehearsing?** Use [`live-script.pdf`](live-script.pdf), the word-for-word script with every
+> command, prompt, and recovery. It supersedes the timings below: Demo 3 now builds the
+> cloud environment live (24:00–31:00), and `/permissions` shows **1. Ask for approval**,
+> **2. Approve for me**, and **3. Full Access**.
+
 **Length:** 40 minutes: 34 of content, 6 for questions and recovery.
 **Shape:** five slides, each followed by a live demo on SprintBoard.
 **Audience:** junior to mid-level developers who have run Codex but never
