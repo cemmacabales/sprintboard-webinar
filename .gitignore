@@ -4,3 +4,6 @@ coverage/
 .DS_Store
 *.log
 
+
+# Scratch directory used by the agent-ready workflow
+.codex-task/

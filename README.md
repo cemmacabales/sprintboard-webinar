@@ -1,6 +1,6 @@
 # SprintBoard webinar demo
 
-SprintBoard is a deliberately small React and TypeScript repository for a live Codex Desktop webinar. It demonstrates repository exploration, planning, test-driven feature work, browser verification, debugging, review, and checkpoint-based recovery without a backend or external services.
+SprintBoard is a deliberately small React and TypeScript repository for a live Codex Desktop webinar. It demonstrates the full agentic loop: reviewing a codebase, filing issues, having Codex implement and review them in CI, and keeping a human at the merge gate.
 
 ## Quick start
 
@@ -21,28 +21,43 @@ npm run lint
 npm run build
 ```
 
-## Prepared exercises
+## Repository states
 
-The feature exercise adds an **At risk** filter for incomplete tasks due today through seven days from now. Copy-ready instructions live in [docs/webinar-prompts.md](docs/webinar-prompts.md).
+| Branch | State | Use |
+| --- | --- | --- |
+| `main` | **Healthy.** All checks pass and the app behaves correctly. | The reference state, and where the workflows live |
+| `demo/needs-work` | **Needs work.** Checks still pass, but the app contains four real problems. | Where the webinar starts |
 
-To reproduce the prepared runtime bug on `demo/start` or `demo/feature-complete`:
+`demo/needs-work` is the interesting one. Its test suite is green, lint is
+clean, and the production build succeeds — and the application still
+white-screens when you open a task with no due date. Green checks are not the
+same as correct software, which is the point of the exercise.
 
-1. Start the app.
-2. Find **Backfill release checklist** in Todo.
-3. Open its task card.
-4. Observe that the details panel fails because the task has no due date.
-5. Reload the page to continue the demo.
+The four seeded problems span four categories: a crash, a missing regression
+test, duplicated logic, and a narrow-width visual defect.
 
-## Checkpoints
+## The automated loop
 
-| Branch | Purpose |
-| --- | --- |
-| `demo/start` | Initial app, three filters, and the prepared crash |
-| `demo/feature-complete` | At-risk feature and tests; crash still present |
-| `demo/bug-fixed` | Null-safe due dates and regression coverage |
-| `demo/final` | Reviewed date utility, spacing polish, and final screenshot |
+Label an issue `agent-ready` and Codex implements it, verifies it, opens a pull
+request, reviews its own diff, and labels it `ready-to-merge`. A human performs
+the merge.
 
-Return to a known checkpoint with `git switch <branch>`, then run `npm ci`. Switching branches with uncommitted work may overwrite or strand demo changes, so commit or stash anything you want to keep first.
+Setup instructions, including the two repository settings people usually miss,
+are in [docs/presentation/automation-setup.md](docs/presentation/automation-setup.md).
+
+## Presenting
+
+- [Run of show](docs/presentation/run-of-show.md) — minute by minute, with recovery
+- [Copy-ready prompts](docs/webinar-prompts.md) — paste these verbatim
+- [Automation setup](docs/presentation/automation-setup.md) — the pipeline, explained
+- [Presenter checklist](docs/presenter-checklist.md) — pre-flight
+
+## Legacy checkpoints
+
+The original linear demo checkpoints remain for reference and recovery:
+`demo/start`, `demo/feature-complete`, `demo/bug-fixed`, `demo/final`.
+Dependencies are identical across every branch, so `git reset --hard <branch>`
+recovers a state instantly without reinstalling.
 
 ## Screenshots
 

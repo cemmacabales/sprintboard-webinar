@@ -922,3 +922,102 @@ Before claiming a continuation task is complete, confirm every applicable item:
 ## 25. Concise state summary
 
 The repository is a complete, tested, private SprintBoard demo application on `develop`, with four immutable webinar checkpoints and a merged implementation PR. The user encountered npm `ENOENT` because GitHub still defaults to an empty `main`. Real screenshots, the final slide deck, and tracked presentation scripts remain the principal unfinished artifacts. Continue from `develop`, preserve the checkpoints, follow the user's Git identity rules, and make the default-branch decision explicit before changing repository topology.
+
+---
+
+# Addendum — 12 September 2026: the agentic flow
+
+Sections 1–25 above remain the historical record of how SprintBoard was built.
+The webinar direction changed after that record was written. Where the two
+disagree, this addendum wins.
+
+## What changed
+
+The session is no longer a linear Desktop walkthrough over four checkpoints. It
+is three acts of escalating autonomy:
+
+1. **You drive** — review `demo/needs-work` in the desktop app, file the issues.
+2. **It drives** — label one `agent-ready`; CI implements, verifies, opens a
+   pull request, reviews it, and labels it `ready-to-merge`. A human merges.
+3. **It watches** — a scheduled Codex automation reviews the repository, files
+   an issue, and the cycle restarts.
+
+The connective idea is that `AGENTS.md` is why the agent in the app and the
+agent in CI behave the same way.
+
+## Topology changes
+
+| Item | Before | Now |
+| --- | --- | --- |
+| Default branch | `main`, empty init commit only | `main`, healthy and complete |
+| Visibility | private | **public** |
+| Trunk | `develop` | `main` |
+| Demo entry point | `demo/start` | `demo/needs-work` |
+
+`develop` still exists but is no longer the merge target. `AGENTS.md` now says
+branch from and open pull requests against `main`.
+
+The `demo/start`, `demo/feature-complete`, `demo/bug-fixed`, and `demo/final`
+checkpoints are untouched and still valid for recovery.
+
+## The needs-work state
+
+`demo/needs-work` branches from healthy `main` and reintroduces four problems in
+four categories. Its test suite passes, lint is clean, and the build succeeds —
+deliberately. Green checks with a white-screening app is the lesson.
+
+| Category | File | Problem |
+| --- | --- | --- |
+| Crash | `src/lib/date.ts` | `formatDate` uses `value!.slice(0, 10)` |
+| Coverage | `src/App.test.tsx` | The regression test that would catch it was removed |
+| Maintainability | `src/lib/filters.ts` | `isAtRisk` reimplements `isWithinNextDays` |
+| Visual | `src/styles.css` | Negative margin on the at-risk count under 520px |
+
+That branch carries a neutral project README and **no presenter documentation**.
+The earlier material described the seeded problems, so an agent reviewing the
+branch read the answers before looking at the code. Keep it that way.
+
+## Pipeline
+
+- `.github/workflows/agent-ready.yml` — issue labelled `agent-ready` → implement
+  → verify → pull request → review → `ready-to-merge`
+- `.github/workflows/codex-review.yml` — reviews human-opened pull requests
+- `.github/review-schema.json` — structured review verdict
+
+Two things are required before any of it runs, and neither can be done from a
+terminal:
+
+1. `OPENAI_API_KEY` as an Actions secret.
+2. Actions workflow permissions set to read/write, with **Allow GitHub Actions
+   to create and approve pull requests** enabled.
+
+The repository variable `DEMO_BASE_BRANCH` selects the branch agents work
+against. It is set to `demo/needs-work` for the webinar and should be unset
+afterwards.
+
+A pull request created with `GITHUB_TOKEN` does not raise `pull_request`
+events, which is why the agent's own pull requests are reviewed by a second job
+in the same workflow run rather than by `codex-review.yml`.
+
+## Superseded items
+
+- Section 4's 35-minute run of show is replaced by
+  `docs/presentation/run-of-show.md`.
+- Section 22's Priority 0 items are resolved: the default branch is fixed and
+  the repository is public.
+- The `margin-left` spacing defect is no longer a demo beat in its own right. It
+  is one of the four seeded findings.
+- Screenshots remain uncaptured. This is now low priority; the README no longer
+  links to them.
+
+## Current terminology, verified 12 September 2026
+
+- Models: **GPT-6 Astra**, **GPT-5.6 Sol / Terra / Luna**, **5.3 Codex Spark**.
+  CLI slugs look like `gpt-5.6-terra`.
+- Reasoning levels: **Light** (Low in the CLI), **Medium** (default), **High**,
+  **Extra High**, **Max**, **Ultra**.
+- Astra shipped 3 September 2026 in a phased rollout. Confirm it is in the
+  presenter's own picker before putting it on a slide.
+- The app calls the user's original checkout a **Local checkout**, a
+  Codex-created worktree a **Worktree**, and moving a thread between them a
+  **Handoff**.
