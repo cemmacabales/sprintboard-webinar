@@ -85,7 +85,7 @@ function chip(slide, x, y, w, label, color, solid = false) {
   });
   pill(s, "the stakes");
   s.addNotes(
-    "0:00–4:00\n\n" +
+    "0:00–4:00 · Full script: docs/presentation/live-script.pdf\n\n" +
     "Opening frame: most developers use Codex as a chat box that happens to sit in a terminal. This session is the configuration layer underneath it: what the agent is allowed to touch, what it reads first, and where the work runs.\n\n" +
     "Who it's for: you've installed Codex and asked it to fix a bug, you approve every prompt by hand, you've heard of AGENTS.md but never checked it's read, and you're not sure when to use the cloud. Nobody needs to have written a config file.\n\n" +
     "Read the four take-aways out loud.\n\n" +
@@ -143,7 +143,7 @@ function chip(slide, x, y, w, label, color, solid = false) {
     "Say it twice: sandbox is blast radius, approval is interruptions. A tight sandbox with 'never' is still safe. A loose sandbox with 'never' is not.\n\n" +
     "Be honest that most of the nine aren't worth using. Counting to nine and finding three worth using is the lesson; the skill is choosing, not memorising.\n\n" +
     "If asked: 'untrusted' is deprecated in current Codex; use on-request.\n\n" +
-    "DEMO 1: (1) read-only + never, ask for the crash fix, it can't write. (2) /permissions to workspace-write + on-request, it fixes and tests with no prompts. (3) ask it to run npm view react version, it asks you. (4) restart with --approve-for-me, same request, a reviewer agent answers. Name danger-full-access + never (--yolo), don't run it. Recovery: Ctrl+C, git reset --hard origin/demo/needs-work."
+    "DEMO 1: (1) read-only + never, ask for the crash fix, it can't write. (2) /permissions → 1. Ask for approval (workspace-write + on-request), it fixes and tests with no prompts. (3) ask it to run npm view react version, it asks you. (4) /permissions → 2. Approve for me (same as --approve-for-me), same request, a reviewer agent answers. Name danger-full-access + never (--yolo), don't run it. Recovery: Ctrl+C, git reset --hard origin/demo/needs-work."
   );
 }
 
@@ -229,11 +229,11 @@ function chip(slide, x, y, w, label, color, solid = false) {
   text(s, "Install dependencies in setup, not in the task.", { x: 0.6, y: 6.2, w: 7.7, h: 0.4, fontSize: 17, bold: true, color: C.terra });
   pill(s, "cloud task");
   s.addNotes(
-    "22:00–25:00, then DEMO 3 25:00–30:00\n\n" +
+    "22:00–24:00, then DEMO 3 24:00–31:00\n\n" +
     "One agent, three surfaces. The judgment call: offload work that is well specified and slow; keep work that needs your eyes, local state, or fast iteration. Ask the room what they'd offload. Good answers: dependency bumps, test backfill, mechanical refactors.\n\n" +
     "Two phases: setup runs your script with internet and secrets; secrets are removed; the agent phase has no network by default, but environment variables remain. So install dependencies in setup, not in the task. This is the highest-value slide for anyone who's hit a confusing cloud failure; budget an extra minute for questions.\n\n" +
     "Failure mode to name: offloading work that needed your local database.\n\n" +
-    "DEMO 3: show the environment settings (setup npm ci, agent internet off). Start Task A first (fix the crash + missing regression test) and leave it running. Start Task B (run npm view react version): it fails with a network error. Line: 'Task B didn't break. It's working exactly as configured.'"
+    "DEMO 3: create a new environment live (sprintboard-live: repository sprintboard-webinar, branch demo/needs-work, Node 22, setup script npm ci, agent internet off). Start Task A first (fix the crash + missing regression test) and leave it running. Start Task B (run npm view react version): it fails with a network error. Line: 'Task B didn't break. It's working exactly as configured.'"
   );
 }
 
@@ -281,11 +281,11 @@ function chip(slide, x, y, w, label, color, solid = false) {
   text(s, "Sandbox is blast radius. Approval is interruptions. Configure the leash once.", { x: 0.6, y: 5.95, w: 7.8, h: 0.55, fontSize: 16, italic: true, color: C.luna, valign: "middle" });
   pill(s, "review and the fast lane");
   s.addNotes(
-    "30:00–31:30, then DEMO 4 31:30–34:00, then questions\n\n" +
+    "31:00–32:30, then DEMO 4 32:30–35:00 (Task A decision at 32:30), then questions 35:00–40:00\n\n" +
     "Codex reviews pull requests and follows the Code Review Rules in AGENTS.md, automatically or when you comment @codex review. Run it before a human sees the branch. Emphasise critical reading: the failure mode for juniors is accepting every suggestion, which is how you get worse code with more confidence.\n\n" +
     "Model lanes: Luna for mechanical work, Terra for everyday repository work, Sol for debugging and ambiguity, Astra for long multi-tool work. Don't read version numbers aloud; they date the recording. Profiles are files in ~/.codex, selected with codex -p.\n\n" +
     "Failure modes: trusting an agent's own claim that the tests pass (point at the CI check), and one long thread doing four unrelated tasks (every demo today started fresh).\n\n" +
-    "DEMO 4: create the pull request from Task A against demo/needs-work; the automatic review posts (or comment @codex review); read one finding aloud and say whether you agree. If time: codex -p fast for a mechanical rename.\n\n" +
+    "DEMO 4: create the pull request from Task A against demo/needs-work; the automatic review posts (or comment @codex review); read one finding aloud and say whether you agree. If it only leaves a thumbs-up, explain why the diff passes the blocking rules and point at the CI check. If time: codex -p fast for a mechanical rename.\n\n" +
     "Close: 'Configure the leash once, and the agent stops needing supervision for the boring 80%.' Questions."
   );
 }

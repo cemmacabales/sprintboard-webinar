@@ -118,6 +118,27 @@ is kept for reference.
   fails. Label behaviour not yet seen live as *expected — confirm in
   rehearsal*.
 
+## 4b. Live script and first cloud run (13 September 2026, evening)
+
+- **`docs/presentation/live-script.pdf`** (generator `guide-source/build_live_script.py`) is the
+  presenter's single reference: word-for-word script, every command and prompt, checkpoints,
+  recovery card, and reset. It changes the timing: Slide 4 22:00–24:00, **Demo 3 24:00–31:00
+  creates a `sprintboard-live` environment live** (delete it after every run; the environment
+  made during setup is the backup), Slide 5 31:00–32:30, Demo 4 32:30–35:00, questions 35:00–40:00.
+- Cloud setup done by the presenter: GitHub connected, environment, Code review and Automatic
+  reviews. Task A took about 4 minutes. Task B failed with a network error as intended.
+- **Fallback PR #8** (`codex/fix-crash-on-task-details-panel` into `demo/needs-work`): CI passed,
+  Codex reacted with a thumbs-up and **no written findings**. Closed without merging; branch kept.
+- The ChatGPT app auto-updated the bundled CLI to **`codex-cli 0.154.0-alpha.6.2`**. All demo
+  flags still exist. Real `/permissions` menu: *Update Model Permissions*: 1. Ask for approval,
+  2. Approve for me ("Only ask for actions detected as potentially unsafe"), 3. Full Access.
+  `codex -p fast` header shows `gpt-5.6-luna low`. First launch in a folder asks "Do you trust
+  the contents of this directory?"; the presenter trusted the repository.
+- `~/.codex/config.toml` also has `approvals_reviewer = "user"`, plugins, and MCP servers
+  (computer-use, node_repl, railway) that start with every CLI session.
+- The presenter's hard rule: **never use API credits** anywhere in the webinar.
+- Claude in Chrome did not work in this session (tabs opened to an invalid URL).
+
 ## 5. Verified facts (don't re-research unless stale)
 
 ### Codex CLI bundled with the ChatGPT desktop app

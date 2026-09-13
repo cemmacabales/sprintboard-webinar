@@ -1,5 +1,10 @@
 # Copy-ready demo prompts
 
+> **Presenting or rehearsing?** Use [`live-script.pdf`](presentation/live-script.pdf), the word-for-word script with every
+> command, prompt, and recovery. It supersedes the timings below: Demo 3 now builds the
+> cloud environment live (24:00–31:00), and `/permissions` shows **1. Ask for approval**,
+> **2. Approve for me**, and **3. Full Access**.
+
 Paste these verbatim. They follow
 [`docs/presentation/run-of-show.md`](presentation/run-of-show.md).
 
