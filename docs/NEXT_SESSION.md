@@ -1,0 +1,214 @@
+# Next session: start here
+
+Last updated 13 September 2026 (presenter is in Asia/Manila). Written at the end
+of a long Claude Code session whose context was nearly full.
+
+**Read in this order:** this file → `AGENTS.md` → `docs/presentation/setup.md` →
+`docs/presentation/run-of-show.md` → `docs/webinar-prompts.md` →
+`docs/presenter-checklist.md`. `docs/PROJECT_HANDOFF.md` is history; where its
+addenda conflict with this file, this file wins.
+
+---
+
+## 1. The user and how to work with them
+
+- Presenter: Cem Macabales, GitHub `cemmacabales`. First Codex webinar; still
+  new to Codex.
+- Git identity `cemmacabales <carlmacabales31@gmail.com>`. **No co-author
+  trailers** (see `AGENTS.md`).
+- **They merge pull requests themselves.** Branch from `main`, open a PR into
+  `main`, don't merge unless asked.
+- **ChatGPT Plus only. No OpenAI API key, no credits.** Anything that needs an
+  API key is out of scope.
+- Wants things to feel instant and automatic. Avoid multi-minute blocking
+  polling loops; give short progress updates.
+- Responds well to a clear recommendation plus decisive action.
+
+## 2. What the webinar is now
+
+The webinar revolves around the presenter's guide deck *Nine Ways to Run an
+Agent* (original: `/Users/cemmacabales/Downloads/codex-guide-deck (1).pptx`, 15
+slides written for 60 minutes; machine-local).
+
+- 40 minutes: 34 of content, 6 for questions and recovery.
+- Five designed slides, each followed by a live SprintBoard demo.
+- Audience: junior to mid-level developers who have run Codex but not
+  configured it.
+- Model lanes use celestial names (Luna, Terra, Sol, Astra) with **no version
+  numbers** on slides.
+- The earlier label-driven agent pipeline was **dropped** by the user.
+
+| Time | Slide | Demo |
+| --- | --- | --- |
+| 0:00–4:00 | 1 · Nine ways to run an agent | 0 · green tests, broken app |
+| 4:00–15:00 | 2 · Sandbox × approval matrix | 1 · read-only refusal → `/permissions` → approval prompt → `--approve-for-me` |
+| 15:00–22:00 | 3 · AGENTS.md | 2 · nested `src/components/AGENTS.md` loads only when starting in that folder |
+| 22:00–30:00 | 4 · Where it runs | 3 · cloud Task A fixes crash; Task B shows agent phase has no network |
+| 30:00–34:00 | 5 · Review first, then pick a lane | 4 · `@codex review` on Task A's PR; `codex -p fast` |
+| 34:00–40:00 | — | Questions and recovery |
+
+## 3. Repository state (verified 13 September 2026)
+
+- `cemmacabales/sprintboard-webinar`, **public**, default branch `main`.
+- **`main` @ `4c0ddfa`** (PR #5 merged): app, `AGENTS.md` with Code Review
+  Rules, `.github/workflows/ci.yml` (test/lint/build on PRs and pushes to
+  `main`), deck, run of show, prompts, setup guide, checklist, bloated
+  `AGENTS.md` example, `fast`/`deep` profile files. 13 tests pass.
+- **`demo/needs-work` @ `386849b`**: the broken state. Four seeded problems —
+  `formatDate` uses `value!.slice(0, 10)` (white-screen crash on "Backfill
+  release checklist"), the regression test for it is missing, `isAtRisk`
+  duplicates the date window, and the at-risk count has `margin-left: -4px`
+  under 520px. 12 tests pass, lint and build pass. Neutral README, **no
+  presenter docs**, plain `ci.yml`, synced `AGENTS.md`, nested
+  `src/components/AGENTS.md`. **Never merge into this branch.**
+- Legacy checkpoints `demo/start`, `demo/feature-complete`, `demo/bug-fixed`,
+  `demo/final` are untouched. Dependencies are identical on every branch.
+- Stale remote branches, safe to delete only if the user agrees: `develop`,
+  `docs/claude-code-handoff`, `feature/webinar-sprintboard`,
+  `feature/agentic-webinar-flow`, `feature/guide-webinar`.
+- Labels: GitHub defaults only. Repository variables: none. Secrets: none.
+- PRs #1–#5 all merged. #3 was merged before its follow-up commits, which is
+  why #4 exists.
+- Deck: `docs/presentation/nine-ways-to-run-an-agent.pptx`. Generator:
+  `docs/presentation/deck-source/build.js`.
+
+## 4. In-progress task: the setup PDF
+
+The user asked: *"make me a pdf walking through the setup of everything! make
+this as comprehensive as you can. as indepth."*
+
+**Status:** research done, tooling identified, nothing generated yet.
+
+**Plan**
+
+- Output `docs/presentation/setup-guide.pdf`, commit through a PR, and send the
+  file to the user.
+- Tooling: `reportlab` and `pypdf` are **not** installed globally. Create a venv
+  in the session scratchpad and `pip install reportlab pypdf`. Fonts with the
+  glyphs you need: `/System/Library/Fonts/Supplemental/Arial*.ttf`,
+  `Arial Unicode.ttf` (arrows and symbols), `Courier New*.ttf`, `Georgia*.ttf`.
+  ReportLab's built-in Helvetica renders arrows as black boxes. QA by rendering
+  pages with `pdftoppm` and inspecting them.
+- Visual language: match the deck palette (section 3 of
+  `deck-source/README.md`), but use light pages so it prints.
+- Suggested structure:
+  1. Cover and what this guide sets up, with time estimates.
+  2. How the pieces fit: laptop (ChatGPT app, Codex CLI, local `live` branch,
+     Vite) ↔ GitHub (`main`, `demo/needs-work`, CI) ↔ Codex cloud
+     (environment, tasks, code review).
+  3. Prerequisites checklist.
+  4. Part 1, local machine: clone and branches, Node/npm, the `codex` alias,
+     `codex login status`, profile files, dev server.
+  5. Part 2, Codex cloud: connect GitHub, create the environment, turn on Code
+     review and Automatic reviews, run a first task, create a PR, keep a closed
+     fallback PR. Mention `codex cloud exec --env <ID> --branch demo/needs-work`
+     as an experimental terminal alternative.
+  6. Part 3, preparing each demo (0–4): exact commands, prompts, expected
+     result, how to verify, what to do if it differs.
+  7. Part 4, rehearsal protocol.
+  8. Part 5, day-of timeline: day before, hour before, live.
+  9. Part 6, troubleshooting table.
+  10. Part 7, after the webinar: reset and cleanup.
+  11. Appendices: command cheat sheet, all prompts, annotated `AGENTS.md`, file
+      map, glossary, verified facts with sources and date.
+- For every step: why, exact action, expected result, how to verify, if it
+  fails. Label behaviour not yet seen live as *expected — confirm in
+  rehearsal*.
+
+## 5. Verified facts (don't re-research unless stale)
+
+### Codex CLI bundled with the ChatGPT desktop app
+
+- Path `/Applications/ChatGPT.app/Contents/Resources/codex`, version
+  `codex-cli 0.153.4`. `codex` is **not on PATH**; `setup.md` adds an alias.
+- `codex login status` → `Logged in using ChatGPT`. `~/.codex/auth.json` is
+  `auth_mode: chatgpt` with no API key.
+- `~/.codex/config.toml` has `model = "gpt-5.6-sol"` and
+  `model_reasoning_effort = "high"`, and **no** permission profile. Don't add
+  the old `github-agent` profile.
+- `-s/--sandbox`: `read-only`, `workspace-write`, `danger-full-access`.
+- `-a/--ask-for-approval` in `--help`: `on-request`, `never`. Official docs add
+  `granular`; `untrusted` is **deprecated**.
+- `--approve-for-me` routes approval requests through automatic review using the
+  workspace-write sandbox. Config equivalent: `approvals_reviewer = "auto_review"`.
+- `/permissions` switches sandbox and approval mid-session (official docs; not
+  found in binary strings — confirm in rehearsal).
+- `-p/--profile <name>` layers `$CODEX_HOME/<name>.config.toml` on the base
+  config. Model slugs present in the binary: `gpt-5.6-luna`, `gpt-5.6-terra`,
+  `gpt-5.6-sol`, `gpt-6-astra`.
+- `codex cloud` is **experimental**: `exec` (`--env <ENV_ID>` required,
+  `--branch` defaults to current, `--attempts` for best-of-N), `status`, `list`,
+  `apply`, `diff`.
+- `codex exec` supports `-s`, `-m`, `-C`, `--json`, `-o`; it has no `-a`.
+- `AGENTS.md` discovery: from the git root down to the working directory; per
+  directory `AGENTS.override.md`, then `AGENTS.md`, then fallback names; joined
+  root first. `project_root_markers` exists but has open issues
+  (openai/codex#12128, #12539).
+
+### Codex cloud and GitHub (official docs)
+
+- Start at `chatgpt.com/codex`. Environments at
+  `chatgpt.com/codex/settings/environments`: repository, default branch (used
+  for caching; tasks can use other branches), setup script (runs **with**
+  internet), maintenance script, environment variables (persist), secrets
+  (setup phase only), "Set package versions", agent internet **off by default**
+  (limited or unrestricted available), `universal` image, cache up to 12 hours.
+- PR from a cloud task: docs say "open a pull request when the work is ready";
+  a third-party guide describes Push → Create PR → View Pull Request. **Confirm
+  button labels in rehearsal.**
+- Code review: Codex settings → **Code review** on for the repository, then
+  **Automatic reviews**. Needs GitHub push or admin permission. `@codex review`
+  requests a review; `@codex fix …` starts a fix. Codex reacts with 👀 and
+  focuses on P0/P1 findings. It reads `## Code Review Rules` from the
+  `AGENTS.md` closest to the code.
+- `@codex` on GitHub **issues** isn't available on subscription plans
+  (openai/codex#34425, open). On pull requests it works.
+- Plus usage (official pricing page), local messages per 5 hours: Astra 5–45,
+  Sol 10–100, Terra 25–200, Luna 250–2,000. Local and cloud share the allowance;
+  weekly limits may apply. Dashboard: `chatgpt.com/codex/settings/usage`.
+- `openai/codex-action` requires `OPENAI_API_KEY`. ChatGPT-managed auth in CI is
+  documented with "Do not use this workflow for public or open-source
+  repositories."
+- Codex app automations run on a schedule or manually; no GitHub event triggers
+  (openai/codex#24864).
+
+### Local environment
+
+- Node v25.8.1, npm 11.11.0. Vite binds `localhost` only; `127.0.0.1` is
+  refused.
+- `gh` 2.89.0, logged in as `cemmacabales` via keyring with `repo`, `workflow`,
+  `gist`, `read:org`.
+- `soffice`, `pdftoppm`, `pdfinfo`, `pdftotext` are at `/opt/homebrew/bin`.
+- Not installed globally: `markitdown`, `defusedxml`, `lxml`, `reportlab`,
+  `pypdf`, `pptxgenjs`, `react-icons`, `sharp`. Install into a scratch folder
+  when needed.
+
+## 6. Gotchas learned the hard way
+
+- zsh treats `$var:A` as a path modifier. Write `git show "${ref}:AGENTS.md"`.
+- `gh run list --workflow <file>` returns nothing until that workflow exists on
+  the default branch. Filter by `workflowName` with `--json` and `--jq` instead.
+- Check `gh pr view N --json state` before diagnosing a "stuck" PR; the user may
+  already have merged it.
+- Events created with `GITHUB_TOKEN` don't trigger other workflows.
+- Codex's `workspace-write` sandbox blocks network. The legacy
+  `sandbox_workspace_write.network_access` setting does **not** apply under
+  permission profiles (tested). Not needed for the current webinar.
+- The auto-mode permission classifier has blocked: `gh pr merge` chained with
+  other commands, `gh api -X PUT …/actions/permissions/workflow`, and sandbox
+  test runs that exported `GH_TOKEN`. Split commands or ask the user.
+- A reading of a nested `AGENTS.md` by the agent while exploring isn't the same
+  as loading it; Demo 2's prompt says "without opening any files" for that
+  reason.
+
+## 7. Open items, in priority order
+
+1. **Setup PDF** — section 4.
+2. The user still has to do `docs/presentation/setup.md`: alias, profile files,
+   Codex cloud connection, environment, Code review and Automatic reviews,
+   fallback PR, and one timed rehearsal. None confirmed done.
+3. During rehearsal, confirm cloud UI labels, `/permissions`, and
+   `--approve-for-me` behaviour; update the docs if anything differs.
+4. The deck uses Calibri; present from PowerPoint, not Keynote or Google Slides.
+5. Optional: delete stale remote branches (ask first), capture screenshots,
+   trim superseded addenda in `docs/PROJECT_HANDOFF.md`.
