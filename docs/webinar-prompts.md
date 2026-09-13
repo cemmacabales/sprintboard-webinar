@@ -79,32 +79,14 @@ Report findings only. Do not edit.
 
 ---
 
-## 6. Scheduled review automation (Act 3)
+## 6. The automations
 
-This is configured once in the Codex app, not pasted live. See
-[`automation-setup.md`](presentation/automation-setup.md).
+These are configured once in the Codex app, not pasted live. Their prompts live
+in [`docs/automations/`](automations/README.md):
 
-```text
-Review this repository for correctness, accessibility, and maintainability
-problems. Do not change any code.
+- [Agent: implement](automations/implement.md) — picks up `agent-ready` issues and opens pull requests
+- [Agent: review](automations/review.md) — reviews `agent-pr` pull requests and labels a verdict
+- [Nightly repository review](automations/nightly-review.md) — files `agent-filed` issues
 
-For each genuine problem you find, check whether an open issue already covers
-it. If not, open one with `gh issue create`, labelled `agent-filed`, containing
-reproduction steps and acceptance criteria.
-
-If you find nothing worth filing, say so and open nothing.
-```
-
----
-
-## Prompts that run without you
-
-These live in the workflow files and are worth showing on screen rather than
-pasting:
-
-- **Implementation** — [`.github/workflows/agent-ready.yml`](../.github/workflows/agent-ready.yml), the `Run Codex` step
-- **Review** — the `Review the diff` step in the same file, and in
-  [`.github/workflows/codex-review.yml`](../.github/workflows/codex-review.yml)
-
-Both begin by telling Codex to read `AGENTS.md`. That is the point: the rules
-you rely on in the app are the rules that apply when nobody is watching.
+All three begin by following `AGENTS.md`. That is the point: the rules you rely
+on in the app are the rules that apply when nobody is watching.

@@ -53,8 +53,10 @@ Switch to the browser and show the four real issues on GitHub.
 
 ### 12:30–13:30 · Hand one to the pipeline
 
-Apply the **`agent-ready`** label to the crash issue. Show the Actions tab
-starting. Then **leave it.** Do not watch it.
+Apply the **`agent-ready`** label to the crash issue. Within seconds the
+**Agent queue** workflow comments *"Queued for Codex."* Switch to the Codex app
+and press **Run now** on **Agent: implement**. Then **leave it.** Do not watch
+it.
 
 > "That is going to take a few minutes. While it works, let me show you the
 > same job done the way you'd do it on a Tuesday."
@@ -86,20 +88,23 @@ to know what it's allowed to touch.
 
 ### 21:00–26:00 · Back to the pipeline
 
-Return to the Actions tab. The run shows two jobs: **implement**, then
-**review**.
+Return to GitHub. The issue has moved from `agent-ready` to `agent-working`, and
+a pull request labelled `agent-pr` links back to it.
 
-Walk the result:
-
-- a branch `agent/issue-N`
-- a pull request that closes the issue
-- a structured review comment with a verdict
-- the **`ready-to-merge`** label, applied by the review job
+1. In the Codex app, press **Run now** on **Agent: review**.
+2. The pull request gets `codex-reviewing`, then a review comment and
+   `codex-approved`.
+3. The **PR gate** workflow runs test, lint, and build, and adds
+   **`ready-to-merge`**.
 
 Read the review comment aloud. Then **you** press merge.
 
-**The line to land:** every step was automated except the last one. The human
-stayed at the merge gate on purpose.
+**The line to land:** Codex wrote it and Codex reviewed it, in separate runs
+that share nothing but `AGENTS.md`. Actions checked it. A human merged it. Every
+step was automated except the one that should never be.
+
+*If someone asks:* this runs on a ChatGPT Plus plan. GitHub Actions does the
+deterministic work for free; Codex runs as scheduled automations on this Mac.
 
 ---
 
@@ -130,8 +135,8 @@ worktrees and handoff → subagents → the pipeline you just watched.
 
 If you finish early, the overflow beats in priority order:
 
-1. Open a pull request from your local fix to show `codex-review.yml` firing on
-   a human pull request.
+1. Open a pull request from your local fix and comment `@codex review` on it, to
+   show Codex reviewing directly on GitHub. The PR gate runs on it too.
 2. The worktree handoff — a second thread running in parallel.
 3. The narrow-width visual issue in the built-in browser.
 
@@ -145,7 +150,8 @@ Everything is one command. No reinstall, no branch switch.
 | --- | --- | --- |
 | Review finds nothing useful | *(nothing)* | Read the four findings from this document and move on |
 | Local debug stalls | `git reset --hard main` | "Here's the fix it was working toward" |
-| CI run fails or is slow | *(nothing)* | Open the pre-staged pull request from rehearsal |
+| Automation hasn't picked up the label | Press **Run now** again | "It checks on a schedule; I'm asking it to check now" |
+| Implement or review run fails | *(nothing)* | Open the pre-staged pull request from rehearsal |
 | Automation doesn't fire | *(nothing)* | File the issue by hand with `gh issue create` |
 
 Work on a disposable branch so resets are free:
@@ -158,13 +164,15 @@ git switch -c live demo/needs-work
 
 ## Pre-flight
 
-- [ ] `git switch -c live demo/needs-work && npm ci && npm run dev`
+- [ ] `git switch -C live origin/demo/needs-work && npm ci && npm run dev`
 - [ ] Use the **`localhost`** URL Vite prints — `127.0.0.1` is not bound.
 - [ ] Model **Terra**, effort **Medium**, execution **Local**.
-- [ ] `OPENAI_API_KEY` secret present (see [automation-setup.md](automation-setup.md)).
-- [ ] Actions set to read/write **and** allowed to create pull requests.
-- [ ] The **Nightly repository review** automation exists and has been test-run once.
-- [ ] One pre-staged pull request from rehearsal, kept closed, as the CI fallback.
+- [ ] `~/.codex/config.toml` has the `github-agent` permission profile (see [automation-setup.md](automation-setup.md)).
+- [ ] **Agent: implement**, **Agent: review**, and **Nightly repository review** exist, each on a worktree.
+- [ ] The two agents are scheduled every 5 minutes for the session.
+- [ ] One full cycle rehearsed, and one pre-staged pull request kept closed as the fallback.
+- [ ] `DEMO_BASE_BRANCH` is `demo/needs-work`.
+- [ ] Usage meter has headroom — no full rehearsal in the last 5 hours.
+- [ ] Mac plugged in, sleep disabled, Codex app open.
 - [ ] `docs/webinar-prompts.md` open in a tab for copying.
 - [ ] Notifications off; unrelated repositories and tabs closed.
-- [ ] Rehearsed once strictly to time, and once with a deliberate failure.

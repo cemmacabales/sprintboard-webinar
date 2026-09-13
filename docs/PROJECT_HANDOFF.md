@@ -977,27 +977,33 @@ That branch carries a neutral project README and **no presenter documentation**.
 The earlier material described the seeded problems, so an agent reviewing the
 branch read the answers before looking at the code. Keep it that way.
 
-## Pipeline
+## Pipeline (ChatGPT Plus, no API key)
 
-- `.github/workflows/agent-ready.yml` — issue labelled `agent-ready` → implement
-  → verify → pull request → review → `ready-to-merge`
-- `.github/workflows/codex-review.yml` — reviews human-opened pull requests
-- `.github/review-schema.json` — structured review verdict
+The first version used `openai/codex-action`, which needs an OpenAI API key.
+The user has ChatGPT Plus and no API credits, and OpenAI says ChatGPT-managed
+auth in CI must not be used on public repositories. The pipeline was rebuilt
+the same day:
 
-Two things are required before any of it runs, and neither can be done from a
-terminal:
+| Part | Runs where | File |
+| --- | --- | --- |
+| Agent queue — instant acknowledgement of `agent-ready` | GitHub Actions | `.github/workflows/agent-queue.yml` |
+| Agent: implement — claims, fixes, tests, pushes, opens PR | Codex app automation | `docs/automations/implement.md` |
+| Agent: review — reviews diff against `AGENTS.md`, labels verdict | Codex app automation | `docs/automations/review.md` |
+| PR gate — checks, then `ready-to-merge` if `codex-approved` | GitHub Actions | `.github/workflows/pr-gate.yml` |
+| Nightly repository review — files `agent-filed` issues | Codex app automation | `docs/automations/nightly-review.md` |
 
-1. `OPENAI_API_KEY` as an Actions secret.
-2. Actions workflow permissions set to read/write, with **Allow GitHub Actions
-   to create and approve pull requests** enabled.
+Neither workflow calls a model or needs a secret. Codex automations have no
+GitHub event triggers yet (openai/codex#24864), so the agents poll on a
+schedule and the presenter presses **Run now** on stage.
 
-The repository variable `DEMO_BASE_BRANCH` selects the branch agents work
-against. It is set to `demo/needs-work` for the webinar and should be unset
-afterwards.
+The automations need network access from Codex's sandbox. The `github-agent`
+permission profile in `docs/presentation/automation-setup.md` was tested
+against the bundled Codex CLI 0.153.4: `gh` and `git push` work through the
+Keychain login, npm works, other domains and writes outside the workspace are
+blocked. The earlier advice to set `sandbox_workspace_write.network_access`
+does **not** work under permission profiles.
 
-A pull request created with `GITHUB_TOKEN` does not raise `pull_request`
-events, which is why the agent's own pull requests are reviewed by a second job
-in the same workflow run rather than by `codex-review.yml`.
+`DEMO_BASE_BRANCH` still selects the branch agents work against.
 
 ## Superseded items
 

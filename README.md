@@ -38,12 +38,16 @@ test, duplicated logic, and a narrow-width visual defect.
 
 ## The automated loop
 
-Label an issue `agent-ready` and Codex implements it, verifies it, opens a pull
-request, reviews its own diff, and labels it `ready-to-merge`. A human performs
-the merge.
+Label an issue `agent-ready`. A Codex automation implements it and opens a pull
+request, a second Codex automation reviews it, GitHub Actions runs the checks
+and applies `ready-to-merge`, and a human merges.
 
-Setup instructions, including the two repository settings people usually miss,
-are in [docs/presentation/automation-setup.md](docs/presentation/automation-setup.md).
+It runs on a **ChatGPT Plus** plan with no API key: Codex works as scheduled
+automations in the Codex app, and GitHub Actions only does the deterministic
+parts. Setup, including the sandbox configuration that lets automations reach
+GitHub, is in
+[docs/presentation/automation-setup.md](docs/presentation/automation-setup.md).
+The automation prompts are in [docs/automations/](docs/automations/README.md).
 
 ## Presenting
 
