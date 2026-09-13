@@ -1,51 +1,33 @@
 # Presenter checklist
 
-Full timing and recovery live in
-[`docs/presentation/run-of-show.md`](presentation/run-of-show.md).
+Timing and recovery: [run-of-show.md](presentation/run-of-show.md).
+One-time setup: [setup.md](presentation/setup.md).
 
-## Repository and pipeline
+## The day before
 
-- [ ] `agent-queue.yml` and `pr-gate.yml` are on `main`.
-- [ ] `pr-gate.yml` is on `demo/needs-work`.
-- [ ] Labels exist: `agent-ready`, `agent-working`, `agent-pr`, `codex-reviewing`, `codex-approved`, `changes-requested`, `ready-to-merge`, `agent-filed`.
-- [ ] `DEMO_BASE_BRANCH` is set to `demo/needs-work`.
-- [ ] One full cycle has completed in rehearsal: label → PR → review → `ready-to-merge`.
-- [ ] One rehearsal pull request kept closed as the fallback.
-- [ ] Other rehearsal issues and pull requests closed, so the board is clean on stage.
+- [ ] One full rehearsal, strictly to time.
+- [ ] Fallback pull request created from Task A, reviewed by Codex, and **closed without merging**.
+- [ ] Codex cloud: GitHub connected, environment on `demo/needs-work` with `npm ci`, **Code review** and **Automatic reviews** on.
+- [ ] `~/.codex/fast.config.toml` and `~/.codex/deep.config.toml` exist, and their model names match your picker.
+- [ ] Astra appears in your picker, or you'll say it's rolling out.
 
-## Local app
+## One hour before
 
-- [ ] `git switch -c live demo/needs-work`
-- [ ] `npm ci`
-- [ ] `npm run test:run`, `npm run lint`, `npm run build` — all pass on the broken branch.
-- [ ] `npm run dev`, and use the **`localhost`** URL Vite prints. `127.0.0.1` is not bound.
-- [ ] Confirm the white-screen crash reproduces on **Backfill release checklist**.
-- [ ] Confirm it does not reproduce on `main`.
-
-## Codex app
-
-- [ ] Model **Terra**, effort **Medium**, execution **Local**.
-- [ ] Confirm the model picker matches the slide, including Astra's availability in your account.
-- [ ] gh plugin installed and authenticated.
-- [ ] `~/.codex/config.toml` has the `github-agent` permission profile, and the app was restarted after adding it.
-- [ ] **Agent: implement**, **Agent: review**, and **Nightly repository review** exist, each on a worktree.
-- [ ] The two agents are scheduled every 5 minutes for the session.
-- [ ] Usage meter has headroom.
-- [ ] `docs/webinar-prompts.md` open for copying.
-
-## Room
-
-- [ ] Notifications off.
-- [ ] Unrelated repositories, tabs, and private windows closed.
-- [ ] Slides loaded and readable at 1080p share scale.
-- [ ] Rehearsed once strictly to time, and once with a deliberate failure.
+- [ ] `codex login status` says `Logged in using ChatGPT`.
+- [ ] `git fetch origin && git switch -C live origin/demo/needs-work && npm ci`
+- [ ] `npm run test:run` shows 12 passed.
+- [ ] `src/components/AGENTS.md` exists on the `live` branch.
+- [ ] `npm run dev`, open the **localhost** URL, confirm the crash on **Backfill release checklist**, then reload.
+- [ ] Deck open on slide 1.
+- [ ] Browser tabs: chatgpt.com/codex, the environment settings, the GitHub repository, and the bloated `AGENTS.md` example on `main`.
+- [ ] Usage meter has headroom. No full rehearsal in the last 5 hours.
+- [ ] Notifications off, unrelated tabs closed, terminal font enlarged.
 
 ## Fast recovery
 
 | If this fails | Do this |
 | --- | --- |
-| Local step stalls | `git reset --hard main` — no reinstall needed |
-| Automation hasn't picked up the label | Press **Run now** |
-| Implement or review run fails | Open the pre-staged rehearsal pull request |
-| Automation doesn't fire | File the issue by hand with `gh issue create` |
-| Review returns nonsense | Read it anyway; a bad review is a real teaching moment |
+| A local step stalls | Ctrl+C, `git reset --hard origin/demo/needs-work`, next step |
+| Nested rules appear from the root | Re-run with "without opening any files" |
+| Task A isn't done by 31:00 | Reopen the fallback pull request |
+| Automatic review doesn't post | Comment `@codex review` |

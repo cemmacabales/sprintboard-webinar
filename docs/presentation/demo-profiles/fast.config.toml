@@ -1,0 +1,9 @@
+# Codex profile: the fast lane (Luna).
+# Copy to ~/.codex/fast.config.toml and start Codex with:  codex -p fast
+# Profiles are layered on top of ~/.codex/config.toml.
+#
+# Use for mechanical work: renames, test scaffolding, small edits.
+# Model availability changes. Check the model picker before relying on the name.
+
+model = "gpt-5.6-luna"
+model_reasoning_effort = "low"

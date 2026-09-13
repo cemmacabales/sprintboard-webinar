@@ -1,178 +1,219 @@
-# Run of show — Codex Desktop: from first prompt to a self-sustaining loop
+# Run of show: Nine Ways to Run an Agent
 
-**Length:** 34 minutes of content, 6 minutes of questions and recovery.
-**Shape:** three acts of escalating autonomy — *you drive → it drives → it watches.*
-**Live model:** Terra, medium reasoning, Local execution.
-**Demo branch:** `demo/needs-work`.
+**Length:** 40 minutes: 34 of content, 6 for questions and recovery.
+**Shape:** five slides, each followed by a live demo on SprintBoard.
+**Audience:** junior to mid-level developers who have run Codex but never
+configured it.
+**Deck:** `docs/presentation/nine-ways-to-run-an-agent.pptx`
+**Demo branch:** `demo/needs-work`, checked out locally as `live`. Its tests
+pass and the app still crashes.
+**Plan:** ChatGPT Plus. No API key anywhere.
 
-The one sentence the whole session is built on:
+The sentence the whole session is built on:
 
-> `AGENTS.md` is why the agent in your app and the agent in your CI behave the
-> same way.
+> Sandbox is blast radius. Approval is interruptions. Configure the leash once,
+> and the agent stops needing supervision for the boring 80%.
+
+Prompts for every demo are in [`docs/webinar-prompts.md`](../webinar-prompts.md).
 
 ---
 
-## Opening — slides (0:00–6:00)
+## At a glance
 
-| Time | Slide | Beat |
+| Time | Slide | Demo |
 | --- | --- | --- |
-| 0:00–1:30 | **1 — The loop** | Show the healthy app, then the broken one. "In half an hour this repo reviews itself, files its own issues, fixes them, and reviews the fix. I merge." |
-| 1:30–4:00 | **2 — The sky** | Open the real model picker beside the slide. Choose **Terra / Medium**. Line: *"Raise reasoning because the problem got harder, not because the prompt got longer."* |
-| 4:00–6:00 | **3 — Where it runs** | Local / Worktree / Cloud, then approvals and sandbox. Say why you are Local: the audience sees the same files you do. |
+| 0:00–4:00 | 1 · Nine ways to run an agent | Demo 0 · the stakes (1 min) |
+| 4:00–15:00 | 2 · The matrix | Demo 1 · sandbox and approvals (7 min) |
+| 15:00–22:00 | 3 · AGENTS.md | Demo 2 · discovery (4 min) |
+| 22:00–30:00 | 4 · Where it runs | Demo 3 · cloud task and the two phases (5 min) |
+| 30:00–34:00 | 5 · Review first, then pick a lane | Demo 4 · `@codex review` and the fast lane (2.5 min) |
+| 34:00–40:00 | — | Questions and recovery |
 
 ---
 
-## Act 1 — You drive (6:00–13:30)
+## 0:00–4:00 · Slide 1: Nine ways to run an agent
 
-### 6:00–10:00 · Review and triage
+**Say:** "You've run Codex. You haven't configured it." Most people use it as a
+chat box that happens to sit in a terminal. This session is the layer
+underneath: what the agent may touch, what it reads first, and where the work
+runs.
 
-Paste **Prompt 1 (Review)**. Codex reads `AGENTS.md`, then the code, and reports
-four problems. It must not fix anything.
+Name who it's for: you've asked it to fix a bug, you approve every prompt by
+hand, you've heard of `AGENTS.md` but never checked it's read, and you're not
+sure when to use the cloud. Nobody needs a config file to follow along.
 
-Expected findings:
+Read the four take-aways on the slide out loud.
 
-| # | Category | Where |
-| --- | --- | --- |
-| 1 | Crash | `src/lib/date.ts` — `value!.slice(0, 10)` on a null due date |
-| 2 | Coverage | `src/App.test.tsx` — nothing opens the task with no due date |
-| 3 | Maintainability | `src/lib/filters.ts` — reimplements the window already in `date.ts` |
-| 4 | Visual | `src/styles.css` — negative margin on the at-risk count under 520px |
+### Demo 0 · The stakes (3:00–4:00)
 
-**The line to land:** the suite is green, lint is clean, the build passes — and
-the app white-screens on a real click. Green checks are not correctness.
+1. In the terminal, run the tests. Twelve pass.
+2. In the browser, open **Backfill release checklist**. The whole board
+   white-screens.
 
-*While it reads:* what `AGENTS.md` is, and why repository instructions beat a
-longer prompt.
-
-### 10:00–12:30 · File the issues
-
-Paste **Prompt 2 (File issues)**. Codex uses the gh plugin to open four issues,
-one per finding, each with reproduction steps and acceptance criteria.
-
-Switch to the browser and show the four real issues on GitHub.
-
-### 12:30–13:30 · Hand one to the pipeline
-
-Apply the **`agent-ready`** label to the crash issue. Within seconds the
-**Agent queue** workflow comments *"Queued for Codex."* Switch to the Codex app
-and press **Run now** on **Agent: implement**. Then **leave it.** Do not watch
-it.
-
-> "That is going to take a few minutes. While it works, let me show you the
-> same job done the way you'd do it on a Tuesday."
+**Line to land:** "Green tests, broken app. That's the repository we're about
+to hand to an agent. How much should it be allowed to touch?"
 
 ---
 
-## Act 2 — It drives (13:30–26:00)
+## 4:00–15:00 · Slide 2: The matrix
 
-### 13:30–21:00 · The local loop (this is your CI cover)
+**Say:** two independent questions.
 
-Work the **coverage + crash** issue locally in the desktop app.
+- **Sandbox, the rows:** what can it touch? `read-only`, `workspace-write`,
+  `danger-full-access`.
+- **Approval, the columns:** when it wants to cross a line, who answers?
+  You (`on-request`), a reviewer agent (auto-review), or no one (`never`).
 
-1. Open the built-in browser on the running app.
-2. Click **Backfill release checklist**. The board white-screens.
-3. Paste **Prompt 3 (Debug)**.
-4. Codex reproduces, names the root cause — a non-null assertion that lied to
-   the compiler — makes the smallest fix, adds the missing regression test, and
-   reruns the checks.
+Say it twice: **sandbox is blast radius, approval is interruptions.** A tight
+sandbox with `never` is still safe. A loose sandbox with `never` is not.
 
-**The line to land:** `!` doesn't make a value non-null. It makes TypeScript
-stop asking.
+Three cells you'll use: explore with `read-only` + `never`; daily work with
+`workspace-write` + `on-request`; long unattended runs with `workspace-write` +
+`never`, isolated. The one to avoid: `danger-full-access` + `never`.
 
-*While it works:* sandbox modes and approvals — this is exactly when people want
-to know what it's allowed to touch.
+Be honest that most of the nine aren't worth using. Choosing is the skill, not
+memorising.
 
-> **Recovery:** if this stalls, `git reset --hard main` restores the fixed state
-> instantly. Dependencies are identical across every demo branch, so no
-> `npm ci` is needed and Vite hot-reloads in about two seconds.
+If anyone has read an older post: `untrusted` is deprecated. Use `on-request`.
 
-### 21:00–26:00 · Back to the pipeline
+### Demo 1 · Sandbox and approvals (8:00–15:00)
 
-Return to GitHub. The issue has moved from `agent-ready` to `agent-working`, and
-a pull request labelled `agent-pr` links back to it.
+Four steps, one terminal:
 
-1. In the Codex app, press **Run now** on **Agent: review**.
-2. The pull request gets `codex-reviewing`, then a review comment and
-   `codex-approved`.
-3. The **PR gate** workflow runs test, lint, and build, and adds
-   **`ready-to-merge`**.
+1. **Read-only, nobody asks.** Ask it to fix the crash. It can read and explain
+   but can't write, and with `never` it just reports the failure.
+2. **`/permissions` → workspace-write + on-request.** Same session. Now it
+   fixes the bug and runs the tests with no prompts, because everything stays
+   inside the workspace.
+3. **Cross the line.** Ask it to run `npm view react version`. That needs the
+   network, so it stops and asks you.
+4. **Let an agent answer.** Restart with `--approve-for-me` and ask again. An
+   automatic reviewer decides instead of you. Same sandbox, different person
+   answering.
 
-Read the review comment aloud. Then **you** press merge.
+**Lines to land:** the refusal in step 1 is more memorable than any
+description. Step 4 is the newest column in the matrix.
 
-**The line to land:** Codex wrote it and Codex reviewed it, in separate runs
-that share nothing but `AGENTS.md`. Actions checked it. A human merged it. Every
-step was automated except the one that should never be.
+**Name, don't run:** `danger-full-access` + `never`, also spelled `--yolo`. The
+combination with no brakes.
 
-*If someone asks:* this runs on a ChatGPT Plus plan. GitHub Actions does the
-deterministic work for free; Codex runs as scheduled automations on this Mac.
-
----
-
-## Act 3 — It watches (26:00–31:00)
-
-Open the Codex automation **Nightly repository review**, scheduled daily, and
-press **Run now** to simulate tonight's run.
-
-It reviews the codebase, finds the remaining problem, and files an issue tagged
-`agent-filed`. Apply `agent-ready` to it.
-
-**The line to land:** the loop no longer needs you to start it. It needs you to
-approve it.
+> **Recovery:** Ctrl+C, then `git reset --hard origin/demo/needs-work`, then
+> go to the next step. Nothing later depends on Demo 1's edits.
 
 ---
 
-## Close (31:00–34:00)
+## 15:00–22:00 · Slide 3: AGENTS.md
 
-Return to **Slide 1**. Trace the loop you just ran twice — once by hand, once by
-label, once on a schedule.
+**Say:** it's the file the agent reads before your prompt. Codex reads
+`AGENTS.md` from the git root down to the folder you started in, and joins them
+in that order. A file in a folder *below* where you started isn't loaded.
 
-The ladder, one line each: clear prompt → `AGENTS.md` → tools and the browser →
-worktrees and handoff → subagents → the pipeline you just watched.
+That's why people report "my AGENTS.md is being ignored." **Check discovery
+before you debug the content.**
+
+What belongs: exact commands for tests, lint, and types; conventions you can't
+see from the code; folders to leave alone; what "done" means. What doesn't: a
+copy of the README, or the whole style guide.
+
+Treat it as a prompt you refine over weeks, not documentation you write once.
+
+### Demo 2 · Discovery (18:00–22:00)
+
+1. Show this repository's `AGENTS.md` beside the bloated example. The tight one
+   produces better results, and that surprises people.
+2. Start Codex at the repository root and ask it to list its instructions
+   without opening files. Nothing about components.
+3. Quit, `cd src/components`, start Codex again, and ask the same thing. Now the
+   component rules appear, including the line *"Component rules loaded."*
+
+**Line to land:** same repository, same question, different starting folder.
 
 ---
 
-## Questions and overflow (34:00–40:00)
+## 22:00–30:00 · Slide 4: Where it runs
 
-If you finish early, the overflow beats in priority order:
+**Say:** one agent, three surfaces. The CLI and app run locally and you watch.
+Cloud tasks run without blocking your machine, several at once. The IDE
+extension puts the same agent in your editor.
 
-1. Open a pull request from your local fix and comment `@codex review` on it, to
-   show Codex reviewing directly on GitHub. The PR gate runs on it too.
-2. The worktree handoff — a second thread running in parallel.
-3. The narrow-width visual issue in the built-in browser.
+The judgment call: offload work that is well specified and slow. Keep work that
+needs your eyes, your local state, or fast iteration.
+
+Ask the room what they'd offload. Good answers: dependency bumps, test
+backfill, mechanical refactors across many files.
+
+Then the two phases, the highest-value part for anyone who's hit a confusing
+cloud failure:
+
+1. **Setup:** your script runs *with* internet. Secrets exist here only.
+2. Secrets are removed.
+3. **Agent:** network is *off* by default. Environment variables remain.
+
+So install dependencies in setup, not in the task. Budget an extra minute for
+questions here.
+
+### Demo 3 · Cloud task and the two phases (25:00–30:00)
+
+1. Show the environment settings: setup script `npm ci`, agent internet off.
+2. **Start Task A first:** fix the crash and add the missing regression test.
+   Leave it running.
+3. **Start Task B:** run `npm view react version` and report what happens. It
+   fails, because the agent phase has no network.
+
+**Line to land:** "Task B didn't break. It's working exactly as configured."
+
+**Failure mode to name:** offloading work that needed your local database.
+
+---
+
+## 30:00–34:00 · Slide 5: Review first, then pick a lane
+
+**Say:** Codex can review pull requests and follows the Code Review Rules in
+`AGENTS.md`, automatically or when you comment `@codex review`. Run it before a
+human sees the branch.
+
+Read the feedback critically. Some findings are wrong, and saying so is the
+skill. Accepting every suggestion is how you get worse code with more
+confidence.
+
+Model lanes: match the model to the task. Luna for mechanical work, Terra for
+everyday repository work, Sol for debugging and ambiguity, Astra for long
+multi-tool work. Profiles switch model and settings as one named unit. Check
+your picker; availability changes.
+
+### Demo 4 · Review and the fast lane (31:30–34:00)
+
+1. Open Task A, review the diff, and create its pull request against
+   `demo/needs-work`.
+2. The automatic review posts. If it hasn't within a minute, comment
+   `@codex review`.
+3. Read one finding aloud and say whether you agree, and why.
+4. If there's time: `codex -p fast` for a mechanical rename.
+
+**Failure modes to name:** trusting an agent's own claim that the tests pass,
+so point at the CI check; and one long thread doing four unrelated things,
+which is why every demo today started a fresh session.
+
+**Close:** read the recap line. "Questions."
+
+---
+
+## 34:00–40:00 · Questions and recovery
+
+If you finish early:
+
+1. `@codex fix it` on the review finding.
+2. The bloated `AGENTS.md` versus the tight one, line by line.
+3. `codex -p deep` on the crash for a root-cause explanation.
 
 ---
 
 ## Recovery table
 
-Everything is one command. No reinstall, no branch switch.
-
-| If this fails | Run | Then say |
+| If this fails | Do this | Then say |
 | --- | --- | --- |
-| Review finds nothing useful | *(nothing)* | Read the four findings from this document and move on |
-| Local debug stalls | `git reset --hard main` | "Here's the fix it was working toward" |
-| Automation hasn't picked up the label | Press **Run now** again | "It checks on a schedule; I'm asking it to check now" |
-| Implement or review run fails | *(nothing)* | Open the pre-staged pull request from rehearsal |
-| Automation doesn't fire | *(nothing)* | File the issue by hand with `gh issue create` |
-
-Work on a disposable branch so resets are free:
-
-```bash
-git switch -c live demo/needs-work
-```
-
----
-
-## Pre-flight
-
-- [ ] `git switch -C live origin/demo/needs-work && npm ci && npm run dev`
-- [ ] Use the **`localhost`** URL Vite prints — `127.0.0.1` is not bound.
-- [ ] Model **Terra**, effort **Medium**, execution **Local**.
-- [ ] `~/.codex/config.toml` has the `github-agent` permission profile (see [automation-setup.md](automation-setup.md)).
-- [ ] **Agent: implement**, **Agent: review**, and **Nightly repository review** exist, each on a worktree.
-- [ ] The two agents are scheduled every 5 minutes for the session.
-- [ ] One full cycle rehearsed, and one pre-staged pull request kept closed as the fallback.
-- [ ] `DEMO_BASE_BRANCH` is `demo/needs-work`.
-- [ ] Usage meter has headroom — no full rehearsal in the last 5 hours.
-- [ ] Mac plugged in, sleep disabled, Codex app open.
-- [ ] `docs/webinar-prompts.md` open in a tab for copying.
-- [ ] Notifications off; unrelated repositories and tabs closed.
+| A local demo step stalls | Ctrl+C, `git reset --hard origin/demo/needs-work` | "Here's what it was about to do" |
+| The approval prompt doesn't appear | Move on | Describe what `on-request` would have asked |
+| The nested rules show up from the root | Re-run with "without opening any files" | "Reading a file isn't the same as loading it" |
+| Task A isn't done by 31:00 | Reopen the rehearsal pull request | "Here's one I made earlier" |
+| The automatic review doesn't post | Comment `@codex review`, or show the rehearsal PR's review | — |

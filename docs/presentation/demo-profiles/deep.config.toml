@@ -1,0 +1,9 @@
+# Codex profile: the deep lane (Sol).
+# Copy to ~/.codex/deep.config.toml and start Codex with:  codex -p deep
+# Profiles are layered on top of ~/.codex/config.toml.
+#
+# Use for debugging, design, and anything with real ambiguity.
+# Model availability changes. Check the model picker before relying on the name.
+
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"

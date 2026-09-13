@@ -1,6 +1,6 @@
 # SprintBoard webinar demo
 
-SprintBoard is a deliberately small React and TypeScript repository for a live Codex Desktop webinar. It demonstrates the full agentic loop: reviewing a codebase, filing issues, having Codex implement and review them in CI, and keeping a human at the merge gate.
+SprintBoard is a deliberately small React and TypeScript repository for a live Codex Desktop webinar. It is the demo repository for "Nine Ways to Run an Agent", a 40-minute session on Codex sandboxes, approval policies, `AGENTS.md`, cloud tasks, and review. Everything runs on a ChatGPT Plus plan.
 
 ## Quick start
 
@@ -36,25 +36,13 @@ same as correct software, which is the point of the exercise.
 The four seeded problems span four categories: a crash, a missing regression
 test, duplicated logic, and a narrow-width visual defect.
 
-## The automated loop
-
-Label an issue `agent-ready`. A Codex automation implements it and opens a pull
-request, a second Codex automation reviews it, GitHub Actions runs the checks
-and applies `ready-to-merge`, and a human merges.
-
-It runs on a **ChatGPT Plus** plan with no API key: Codex works as scheduled
-automations in the Codex app, and GitHub Actions only does the deterministic
-parts. Setup, including the sandbox configuration that lets automations reach
-GitHub, is in
-[docs/presentation/automation-setup.md](docs/presentation/automation-setup.md).
-The automation prompts are in [docs/automations/](docs/automations/README.md).
-
 ## Presenting
 
-- [Run of show](docs/presentation/run-of-show.md) — minute by minute, with recovery
-- [Copy-ready prompts](docs/webinar-prompts.md) — paste these verbatim
-- [Automation setup](docs/presentation/automation-setup.md) — the pipeline, explained
-- [Presenter checklist](docs/presenter-checklist.md) — pre-flight
+- [Deck](docs/presentation/nine-ways-to-run-an-agent.pptx): five slides
+- [Run of show](docs/presentation/run-of-show.md): minute by minute, with recovery
+- [Demo prompts](docs/webinar-prompts.md): paste these verbatim
+- [Setup](docs/presentation/setup.md): one-time preparation
+- [Presenter checklist](docs/presenter-checklist.md): the day before and the hour before
 
 ## Legacy checkpoints
 
