@@ -1,5 +1,10 @@
 # SprintBoard repository instructions
 
+## Skills
+
+- Work directly from these repository instructions and the user's request.
+- Never load, invoke, or use any skill for work in this project.
+
 ## Development
 
 - Use npm and preserve `package-lock.json`.
