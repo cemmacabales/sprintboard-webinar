@@ -86,6 +86,18 @@ describe("SprintBoard starting experience", () => {
     expect(within(details).getByText(/[A-Z][a-z]{2} \d{1,2}, \d{4}/)).toBeVisible();
   });
 
+  it("opens details for a task without a due date", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Open Backfill release checklist/ }));
+
+    const details = screen.getByRole("dialog", { name: "Task details" });
+    expect(
+      within(details).getByRole("heading", { name: "Backfill release checklist" }),
+    ).toBeVisible();
+    expect(within(details).getByText("No date")).toBeVisible();
+  });
+
   it("exposes every filter as a named keyboard-reachable button", () => {
     render(<App />);
 
