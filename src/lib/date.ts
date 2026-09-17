@@ -43,7 +43,8 @@ export function isWithinNextDays(
 }
 
 export function formatDate(value: string | null): string {
-  const isoDate = value!.slice(0, 10);
+  if (!value) return "No date";
+  const isoDate = value.slice(0, 10);
   const date = parseDateOnly(isoDate);
   if (!date) return "Invalid date";
   return new Intl.DateTimeFormat("en", {
